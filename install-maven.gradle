@@ -8,12 +8,12 @@ install {
         pom {
             project {
                 packaging 'aar'
-                groupId publishedGroupId
-                artifactId artifact
+                groupId System.getenv('MAVEN_GROUP_ID')
+                artifactId System.getenv('MAVEN_ARTIFACT')
 
                 // Add your description here
-                name libraryName
-                description libraryDescription
+                name System.getenv('MAVEN_LIBRARY_NAME')
+                description System.getenv('MAVEN_LIBRARY_DESC')
                 url siteUrl
 
                 // Set your license
