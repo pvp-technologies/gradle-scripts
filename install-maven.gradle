@@ -6,25 +6,21 @@ def getDate() {
     return formattedDate
 }
 
-def isSnapshot = System.getProperty("is_snapshot")
-isSnapshot = isSnapshot != null ? isSnapshot : 0
+def isSnapshot = System.getProperty("is_snapshot") == null ? 0 : System.getProperty("is_snapshot")
 
 // Maven project properties definition
-def projectGroupId = System.getProperty("maven_group_id")
-def projectArtifactId = System.getProperty("maven_artifact")
+def projectGroupId = System.getProperty("maven_group_id") == null ? '' : System.getProperty("maven_group_id")
+def projectArtifactId = System.getProperty("maven_artifact") == null ? '' : System.getProperty("maven_artifact")
 def projectVersion = isSnapshot == 0 ? computeVersionName() : computeVersionName() + "-SNAPSHOT"
 
 // Maven project human readable information
-def projectName = System.getProperty("project_name")
-def projectDescription = System.getProperty("project_description")
-
-projectName = projectName != null ? projectName : ''
-projectDescription = projectDescription != null ? projectDescription : ''
+def projectName = System.getProperty("project_name") == null ? '' : System.getProperty("project_name")
+def projectDescription = System.getProperty("project_description") == null ? '' : System.getProperty("project_description")
 
 // Maven repository informations
-def repositoryUrl = System.getProperty("repository_url")
-def repositoryUsername = System.getProperty("repository_username")
-def repositoryPassword = System.getProperty("repository_password")
+def repositoryUrl = System.getProperty("repository_url") == null ? '' : System.getProperty("repository_url")
+def repositoryUsername = System.getProperty("repository_username") == null ? '' : System.getProperty("repository_username")
+def repositoryPassword = System.getProperty("repository_password") == null ? '' : System.getProperty("repository_password")
 
 install {
     repositories.mavenInstaller {
