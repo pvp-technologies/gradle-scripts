@@ -1,18 +1,48 @@
 apply plugin: 'com.github.dcendents.android-maven'
 
+// Maven project properties definition
+def projectGroupId = System.getProperty("maven_group_id")
+def projectArtifactId = System.getProperty("maven_artifact")
+def projectVersion = computeVersionName()
+
+// Maven project human readable information
+def projectName = System.getProperty("project_name")
+def projectDescription = System.getProperty("project_description")
+
+projectName = projectName != null ? projectName : ''
+projectDescription = projectDescription != null ? projectDescription : ''
+
+// Maven repository informations
+def repositoryUrl = System.getProperty("repository_url")
+def repositoryUsername = System.getProperty("repository_username")
+def repositoryPassword = System.getProperty("repository_password")
+
 install {
     repositories.mavenInstaller {
         // This generates POM.xml with proper parameters
         pom {
-            project {
+           project {
                 packaging 'aar'
-                groupId System.getenv('MAVEN_GROUP_ID')
-                artifactId System.getenv('MAVEN_ARTIFACT')
+                groupId projectGroupId
+                artifactId projectArtifactId
 
                 // Add your description here
-                name System.getenv('MAVEN_LIBRARY_NAME')
-                description System.getenv('MAVEN_LIBRARY_DESC')
+                name projectName
+                description projectDescription
             }
+        }
+	}
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: repositoryUrl) {
+		        authentication(userName: repositoryUsername, password: repositoryPassword)
+		    }
+			pom.groupId = projectGroupId
+            pom.artifactId = projectArtifactId
+			pom.version = projectVersion
         }
     }
 }
