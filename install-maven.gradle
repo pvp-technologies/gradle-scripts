@@ -1,9 +1,18 @@
 apply plugin: 'com.github.dcendents.android-maven'
 
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmmss')
+    return formattedDate
+}
+
+def isSnapshot = System.getProperty("is_snapshot")
+isSnapshot = isSnapshot != null ? isSnapshot : 0
+
 // Maven project properties definition
 def projectGroupId = System.getProperty("maven_group_id")
 def projectArtifactId = System.getProperty("maven_artifact")
-def projectVersion = computeVersionName()
+def projectVersion = isSnapshot == 0 ? computeVersionName() : computeVersionName() + "-SNAPSHOT"
 
 // Maven project human readable information
 def projectName = System.getProperty("project_name")
