@@ -1,0 +1,65 @@
+apply plugin: 'com.github.dcendents.android-maven'
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmmss')
+    return formattedDate
+}
+
+def isSnapshot = System.getProperty("is_snapshot") != null ? System.getProperty("is_snapshot") : "0"
+
+// Maven project properties definition
+def projectGroupId = System.getProperty("maven_group_id") != null ? System.getProperty("maven_group_id") : ''
+def projectArtifactId = System.getProperty("maven_artifact") != null ? System.getProperty("maven_artifact") : ''
+def projectVersion = isSnapshot == "0" ? computeVersionName() : computeVersionName() + "-SNAPSHOT"
+
+// Maven project human readable information
+def projectName = System.getProperty("project_name") != null ? System.getProperty("project_name") : ''
+def projectDescription = System.getProperty("project_description") != null ? System.getProperty("project_description") : ''
+
+// Maven repository informations
+def repositoryUrl = System.getProperty("repository_url") != null ? System.getProperty("repository_url") : ''
+def repositoryUsername = System.getProperty("repository_username") != null ? System.getProperty("repository_username") : ''
+def repositoryPassword = System.getProperty("repository_password") != null ? System.getProperty("repository_password") : ''
+
+if (isSnapshot == "1") {
+    artifacts {
+        archives file(snapshotArtifact)
+    }
+} else {
+    artifacts {
+        archives file(releaseArtifact)
+    }
+}
+
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'apk'
+                groupId projectGroupId
+                artifactId projectArtifactId
+                version projectVersion
+
+                // Add your description here
+                name projectName
+                description projectDescription
+            }
+        }
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: repositoryUrl) {
+                authentication(userName: repositoryUsername, password: repositoryPassword)
+            }
+            pom.groupId = projectGroupId
+            pom.artifactId = projectArtifactId
+            pom.version = projectVersion
+        }
+    }
+}
