@@ -1,0 +1,7 @@
+def computeVersionCode() {
+    return ext.versionMajor * 10000 + ext.versionMinor * 1000 + ext.versionPatch * 100
+}
+
+def computeVersionName() {
+    return "${ext.versionMajor}.${ext.versionMinor}.${ext.versionPatch}"
+}
